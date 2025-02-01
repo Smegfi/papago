@@ -1,8 +1,14 @@
+"use client";
+
+import { DeleteDeviceDialog } from "@/components/modals/delete-device";
+import { NewDeviceDialog } from "@/components/modals/new-device";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Pen, Trash } from "lucide-react";
+import { useState } from "react";
 
 export default function Page() {
-   const devices = [
+   const foo = [
       {
          name: "Router A1",
          type: "Router",
@@ -57,16 +63,20 @@ export default function Page() {
          location: "Kancelář 6",
          ip: "192.168.1.9",
       },
-      {
-         name: "VoIP J1",
-         type: "VoIP Telefon",
-         location: "Kancelář 7",
-         ip: "192.168.1.10",
-      },
    ];
 
+   const [devices, setDevices] = useState(foo);
+
+   function AddNewDevice(name: string, type: string, location: string, address: string) {
+      const tempDevices = devices;
+      setDevices([...tempDevices, { name: name, type: type, location: location, ip: address }]);
+   }
+
    return (
-      <div>
+      <div className="rounded-xl bg-muted/50">
+         <div className="p-4">
+            <NewDeviceDialog addDeviceFunc={AddNewDevice} />
+         </div>
          <Table>
             <TableHeader>
                <TableRow>
@@ -85,9 +95,10 @@ export default function Page() {
                      <TableCell>{item.location}</TableCell>
                      <TableCell>{item.ip}</TableCell>
                      <TableCell>
-                        <Button variant={"outline"} size={"icon"}>
-                           Edit
+                        <Button variant={"ghost"} size={"icon"}>
+                           <Pen />
                         </Button>
+                        <DeleteDeviceDialog title={item.name} />
                      </TableCell>
                   </TableRow>
                ))}

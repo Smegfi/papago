@@ -1,24 +1,11 @@
 "use client";
 
 import * as React from "react";
-import {
-   Settings2,
-   SquareTerminal,
-   ThermometerSnowflake,
-   ThermometerSun,
-} from "lucide-react";
+import { Settings2, SquareTerminal, ThermometerSnowflake, ThermometerSun } from "lucide-react";
 
-import { NavMain } from "@/components/nav-main";
-import { NavUser } from "@/components/nav-user";
-import {
-   Sidebar,
-   SidebarContent,
-   SidebarFooter,
-   SidebarHeader,
-   SidebarMenu,
-   SidebarMenuButton,
-   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+import { NavMain } from "@/components/navigation/nav-main";
+import { NavUser } from "@/components/navigation/nav-user";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 
 const data = {
    user: {
@@ -98,12 +85,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                            <ThermometerSun className="size-5" />
                         </div>
                         <div className="grid flex-1 text-left text-sm leading-tight">
-                           <span className="truncate font-semibold">
-                              Praha 10
-                           </span>
-                           <span className="truncate text-xs">
-                              papago teploměry
-                           </span>
+                           <span className="truncate font-semibold">Praha 10</span>
+                           <span className="truncate text-xs">papago teploměry</span>
                         </div>
                      </a>
                   </SidebarMenuButton>

@@ -8,7 +8,7 @@ import {
    SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ThemeChangeButton } from "@/components/theme/theme-change-btn";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/navigation/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 
 const geistSans = Geist({
