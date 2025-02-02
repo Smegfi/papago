@@ -2,6 +2,7 @@
 
 # dependencies
 **node_modules
+**drizzle
 **.pnp
 .pnp.*
 .yarn/*
@@ -9,6 +10,7 @@
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+package-lock.json
 
 # testing
 **coverage
