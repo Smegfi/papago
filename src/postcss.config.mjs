@@ -2,7 +2,7 @@
 /** @type {import('postcss-load-config').Config} */
 const config = {
   plugins: {
-    tailwindcss: { config: require.resolve("configuration/tailwind.config.ts")},
+    tailwindcss: { config: "configuration/tailwind.config.ts" }
   },
 };
 
