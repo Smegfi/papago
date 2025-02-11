@@ -6,6 +6,7 @@ import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/s
 import { ThemeChangeButton } from "@/components/theme/theme-change-btn";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
 import { Separator } from "@/components/ui/separator";
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
    variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
                      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
                   </SidebarInset>
                </SidebarProvider>
+               <Toaster />
             </ThemeProvider>
          </body>
       </html>
