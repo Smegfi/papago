@@ -47,7 +47,7 @@ const data = {
       },
       {
          title: "Nastavení",
-         url: "#",
+         url: "/settings",
          icon: Settings2,
          badge: "TODO",
          badgeColor: "bg-red-500",

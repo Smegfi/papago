@@ -14,7 +14,7 @@ import { DeviceModal, DeviceModalType } from "@/components/device/modals/create-
 import { Loader2, Plus } from "lucide-react";
 import { createDeviceAction } from "@/server/actions";
 import { Device } from "@/server/types";
-import axios from "axios";
+import DeviceConnectionTest from "./connection";
 
 export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void }) {
    const [isOpen, setOpen] = useState(false);
@@ -28,6 +28,9 @@ export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void
          mac: "",
          ipAddress: "",
       },
+      mode: "onChange",
+      reValidateMode: "onChange",
+      delayError: 200,
    });
 
    function onSubmit(data: z.infer<typeof DeviceModal>) {
@@ -72,19 +75,6 @@ export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void
       setLoading(false);
       setOpen(open);
       form.reset();
-   }
-
-   async function testConnection() {
-      fetch("/api", {
-         headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Methods": "*",
-         },
-      })
-         .then((res) => res.text())
-         .then((data) => console.log(data))
-         .catch((err) => console.error(err));
    }
 
    return (
@@ -149,9 +139,7 @@ export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void
                            <FormControl>
                               <div className="flex w-full max-w-sm items-center space-x-2">
                                  <Input placeholder="10.41.20.10" {...field} />
-                                 <Button variant={"outline"} type="button" onClick={() => testConnection()}>
-                                    Test
-                                 </Button>
+                                 <DeviceConnectionTest ipAddress={form.getValues("ipAddress")} />
                               </div>
                            </FormControl>
                            <FormMessage />
