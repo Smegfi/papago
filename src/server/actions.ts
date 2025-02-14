@@ -1,54 +1,37 @@
 "use server";
 
-import { DeviceModalType } from "@/components/modals/create-device/device-modal";
-import { db } from "./db";
-import { device } from "@/server/db/schema";
+import { actionClient } from "@/lib/safe-action";
+import { db } from "@/server/index";
+import { device } from "./schema";
 import { eq } from "drizzle-orm";
+import { createDeviceSchema, getDeviceByIdSchema } from "@/server/types";
+import { revalidatePath } from "next/cache";
 
-export async function createDeviceAction(deviceModel: DeviceModalType) {
-   try {
-      const res = await db
+export const createDeviceAction = actionClient
+   .schema(createDeviceSchema)
+   .action(async ({ parsedInput: { name, location, mac, ipAddress, isEnabled } }) => {
+      await db
          .insert(device)
          .values({
-            name: deviceModel.name,
-            location: deviceModel.location,
-            mac: deviceModel.mac,
-            ipAddress: deviceModel.ipAddress,
-         })
-         .returning({
-            id: device.id,
-            name: device.name,
-            location: device.location,
-            mac: device.mac,
-            ipAddress: device.ipAddress,
+            id: 0,
+            name: name,
+            location: location,
+            mac: mac,
+            ipAddress: ipAddress,
+            isEnabled: isEnabled,
          });
-      return { status: 200, message: `Zařízení ${res[0].name} bylo vytvořeno`, data: res[0] };
-   } catch (e) {
-      const error = e as Error;
-      return { status: 400, message: error.message, data: error };
-   }
-}
+   revalidatePath("/device");
+});
 
-export async function removeDeviceAction(id: number) {
-   try {
-      const result = (await db.delete(device).where(eq(device.id, id))).rowsAffected;
-      if (result > 0) {
-         return { status: 200, message: `Zařízení ${id} bylo smazáno` };
-      } else {
-         return { status: 400, message: `Nepodařilo se smazat zařízení` };
-      }
-   } catch (e) {
-      const error = e as Error;
-      return { status: 400, message: `${error.message}` };
-   }
-}
+// Get All Devices
+export const getDevicesAction = actionClient.action(async () => {
+   const devices = await db.query.device.findMany();
+   return devices;
+});
 
-export async function getDevicesAction() {
-   try {
-      var result = await db.select().from(device);
-      return { status: 200, message: "Done", data: result };
-   } catch (e) {
-      const error = e as Error;
-      return { status: 400, message: "OK" };
-   }
-}
+export const getDeviceByIdAction = actionClient
+   .schema(getDeviceByIdSchema)
+   .action(async ({ parsedInput: { id } }) => {
+      const deviceById = await db.query.device.findFirst({ where: eq(device.id, id) });
+      return deviceById;
+   });

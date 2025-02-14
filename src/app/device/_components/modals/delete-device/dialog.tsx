@@ -7,39 +7,16 @@ import { Loader2, Trash } from "lucide-react";
 import { useState } from "react";
 import { removeDeviceAction } from "@/server/actions";
 import { Device } from "@/server/types";
-import { toast } from "@/hooks/use-toast";
 
-export function DeleteDeviceDialog({ device, removeDevice }: { device: Device; removeDevice: (device: Device) => void }) {
+export function DeleteDeviceDialog({ device }: { device: Device }) {
    const [isOpen, setOpen] = useState<boolean>(false);
    const [isLoading, setLoading] = useState<boolean>(false);
 
    function handleSubmit() {
       setLoading(true);
-      removeDeviceAction(device.id)
-         .then((result) => {
-            if (result.status === 200) {
-               removeDevice(device);
-               setLoading(false);
-               setOpen(false);
-               toast({
-                  title: "Smazáno",
-                  description: `${result.message}`,
-               });
-            } else {
-               toast({
-                  variant: "destructive",
-                  title: "Chyba",
-                  description: `${result.message}`,
-               });
-            }
-         })
-         .catch((error) => {
-            toast({
-               variant: "destructive",
-               title: "Chyba",
-               description: `Server není dostupný.`,
-            });
-         });
+      removeDeviceAction(device.id);
+      setLoading(false);
+      setOpen(false);
    }
 
    function handleDialogOpen(open: boolean) {

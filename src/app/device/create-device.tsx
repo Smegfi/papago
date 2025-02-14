@@ -2,79 +2,50 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
-import { DeviceModal, DeviceModalType } from "@/components/device/modals/create-device/device-modal";
-import { Loader2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { createDeviceSchema, CreateDeviceType } from "@/server/types";
 import { createDeviceAction } from "@/server/actions";
-import { Device } from "@/server/types";
-import DeviceConnectionTest from "./connection";
+import { useAction } from "next-safe-action/hooks";
+import { toast } from "@/hooks/use-toast";
 
-export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void }) {
+export function CreateDeviceDialog() {
    const [isOpen, setOpen] = useState(false);
-   const [isLoading, setLoading] = useState(false);
-
-   const form = useForm<z.infer<typeof DeviceModal>>({
-      resolver: zodResolver(DeviceModal),
+   const {execute} = useAction(createDeviceAction, {
+      onSuccess: () => {
+         console.log("success...");
+      },
+      onError: (errors) => {
+         console.log("error...", errors);
+      },
+      onExecute: (data) => {
+         console.log("executing...", data);
+      }
+   });
+   const form = useForm<CreateDeviceType>({
+      resolver: zodResolver(createDeviceSchema),
       defaultValues: {
          name: "",
          location: "",
          mac: "",
          ipAddress: "",
-      },
-      mode: "onChange",
-      reValidateMode: "onChange",
-      delayError: 200,
+         isEnabled: false,
+      }
    });
 
-   function onSubmit(data: z.infer<typeof DeviceModal>) {
-      setLoading(true);
-
-      const newData: DeviceModalType = {
-         name: data.name,
-         location: data.location,
-         mac: data.mac,
-         ipAddress: data.ipAddress,
-      };
-
-      createDeviceAction(data)
-         .then((result) => {
-            if (result.status == 200) {
-               toast({
-                  title: "Vytvořeno",
-                  description: result.message,
-               });
-               newItem(result.data as Device);
-            } else {
-               toast({
-                  variant: "destructive",
-                  title: "Chyba",
-                  description: result.message,
-               });
-            }
-         })
-         .catch((error) => {
-            toast({
-               variant: "destructive",
-               title: "Chyba",
-               description: `Server není dostupný.`,
-            });
-         });
-
-      setLoading(false);
-      dialogUpdate(false);
-   }
-
    function dialogUpdate(open: boolean) {
-      setLoading(false);
       setOpen(open);
       form.reset();
+   }
+
+   function onFormSubmit(values: CreateDeviceType) {
+      console.log(values);
+      execute(values);
    }
 
    return (
@@ -90,7 +61,7 @@ export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void
                <DialogTitle>Přidat zařízení</DialogTitle>
             </DialogHeader>
             <Form {...form}>
-               <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+               <form onSubmit={form.handleSubmit(onFormSubmit)} className="w-full space-y-4">
                   <FormField
                      control={form.control}
                      name="name"
@@ -98,7 +69,7 @@ export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void
                         <FormItem>
                            <FormLabel>Název zařízení</FormLabel>
                            <FormControl>
-                              <Input placeholder="Papago Karel" {...field} />
+                              <Input {...field} />
                            </FormControl>
                            <FormMessage />
                         </FormItem>
@@ -124,7 +95,7 @@ export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void
                         <FormItem>
                            <FormLabel>MAC adresa</FormLabel>
                            <FormControl>
-                              <Input placeholder="AA:BB:CC:DD:EE:FF" {...field} />
+                              <Input {...field} />
                            </FormControl>
                            <FormMessage />
                         </FormItem>
@@ -139,23 +110,31 @@ export function NewDeviceDialog({ newItem }: { newItem: (device: Device) => void
                            <FormControl>
                               <div className="flex w-full max-w-sm items-center space-x-2">
                                  <Input placeholder="10.41.20.10" {...field} />
-                                 <DeviceConnectionTest ipAddress={form.getValues("ipAddress")} />
                               </div>
                            </FormControl>
                            <FormMessage />
                         </FormItem>
                      )}
                   />
-                  {isLoading ? (
-                     <Button className="w-full mt-4" disabled>
-                        <Loader2 className="animate-spin" />
-                        Ukládání
-                     </Button>
-                  ) : (
-                     <Button className="w-full mt-4" type="submit">
-                        Uložit
-                     </Button>
-                  )}
+                  <FormField
+                     control={form.control}
+                     name="isEnabled"
+                     render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between">
+                           <div className="space-y-0.5">
+                              <FormLabel className="text-sm font-semibold">Povolit</FormLabel>
+                              <FormDescription className="text-xs">Pokud je zařízení zapnuté bude průběžně stahovat data</FormDescription>
+                           </div>
+                           <FormControl>
+                              <Switch checked={field.value} onCheckedChange={field.onChange} />
+                           </FormControl>
+                           <FormMessage />
+                        </FormItem>
+                     )}
+                  />
+                  <Button className="w-full mt-4" type="submit" onClick={() => onFormSubmit(form.getValues())}>
+                     Uložit
+                  </Button>
                </form>
             </Form>
          </DialogContent>

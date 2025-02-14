@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Settings2, SquareTerminal, ThermometerSnowflake, ThermometerSun } from "lucide-react";
+import { ChartArea, Settings2, ThermometerSnowflake, ThermometerSun } from "lucide-react";
 
 import { NavMain } from "@/components/navigation/nav-main";
 import { NavUser } from "@/components/navigation/nav-user";
@@ -15,35 +15,14 @@ const data = {
    },
    navMain: [
       {
-         title: "Dashboard",
-         url: "/",
-         icon: SquareTerminal,
-         isActive: true,
-         items: [
-            {
-               title: "Všechna data",
-               url: "#",
-            },
-            {
-               title: "Export",
-               url: "#",
-            },
-         ],
-      },
-      {
-         title: "Teploměry",
+         title: "Zařízení",
          url: "/device",
          icon: ThermometerSnowflake,
-         items: [
-            {
-               title: "Zobrazit všechny",
-               url: "#",
-            },
-            {
-               title: "Přidat nový",
-               url: "#",
-            },
-         ],
+      },
+      {
+         title: "Měření",
+         url: "/measuring",
+         icon: ChartArea,
       },
       {
          title: "Nastavení",
@@ -51,24 +30,6 @@ const data = {
          icon: Settings2,
          badge: "TODO",
          badgeColor: "bg-red-500",
-         items: [
-            {
-               title: "General",
-               url: "#",
-            },
-            {
-               title: "Team",
-               url: "#",
-            },
-            {
-               title: "Billing",
-               url: "#",
-            },
-            {
-               title: "Limits",
-               url: "#",
-            },
-         ],
       },
    ],
 };

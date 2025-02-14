@@ -1,22 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import "@/styles/globals.css";
+import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeChangeButton } from "@/components/theme/theme-change-btn";
 import { AppSidebar } from "@/components/navigation/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Toaster } from "@/components/ui/toaster";
-
-const geistSans = Geist({
-   variable: "--font-geist-sans",
-   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-   variable: "--font-geist-mono",
-   subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
    title: "Create Next App",
@@ -29,8 +18,8 @@ export default function RootLayout({
    children: React.ReactNode;
 }>) {
    return (
-      <html lang="cs">
-         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <html lang="cs" suppressHydrationWarning>
+         <body>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                <SidebarProvider>
                   <AppSidebar />
@@ -42,11 +31,12 @@ export default function RootLayout({
                            <ThemeChangeButton />
                         </div>
                      </header>
-                     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+                     <main className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</main>
                   </SidebarInset>
                </SidebarProvider>
                <Toaster />
             </ThemeProvider>
+            <Toaster />
          </body>
       </html>
    );
