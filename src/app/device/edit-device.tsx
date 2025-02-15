@@ -2,85 +2,77 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
-import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
-import { Loader2, Pen } from "lucide-react";
-import { updateDeviceAction } from "@/server/actions";
-import { Device, DeviceSchema } from "@/server/types";
+import { Pencil } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { editDeviceSchema, EditDeviceType } from "@/server/types";
+import { editDeviceAction, getDeviceByIdAction } from "@/server/actions";
+import { useAction } from "next-safe-action/hooks";
 
-export function EditDeviceDialog({ item }: { item: Device }) {
+export function EditDeviceDialog({ deviceId }: { deviceId: number }) {
    const [isOpen, setOpen] = useState(false);
-   const [isLoading, setLoading] = useState(false);
-
-   const form = useForm<Device>({
-      resolver: zodResolver(DeviceSchema),
-      defaultValues: {
-         name: item.name,
-         location: item.location,
-         mac: item.mac,
-         ipAddress: item.ipAddress,
-         isEnabled: item.isEnabled,
+   const { execute } = useAction(editDeviceAction, {
+      onSuccess: () => {
+         console.log("success...");
       },
-      mode: "onChange",
-      reValidateMode: "onChange",
-      delayError: 200,
+      onError: (errors) => {
+         console.log("error...", errors);
+      },
+      onExecute: (data) => {
+         console.log("executing...", data);
+      },
+   });
+   const form = useForm<EditDeviceType>({
+      resolver: zodResolver(editDeviceSchema),
+      defaultValues: {
+         name: "",
+         location: "",
+         mac: "",
+         ipAddress: "",
+         isEnabled: false,
+      },
    });
 
-   function onSubmit(data: Device) {
-      setLoading(true);
-
-      updateDeviceAction(data)
-         .then((result) => {
-            if (result.status == 200) {
-               toast({
-                  title: "Vytvořeno",
-                  description: result.message,
-               });
-            } else {
-               toast({
-                  variant: "destructive",
-                  title: "Chyba",
-                  description: result.message,
-               });
-            }
-         })
-         .catch((error) => {
-            toast({
-               variant: "destructive",
-               title: "Chyba",
-               description: `Server není dostupný.`,
+   async function dialogUpdate(open: boolean) {
+      if (open) {
+         const result = await getDeviceByIdAction({ id: deviceId });
+         if (result?.data) {
+            const device = result!.data;
+            form.reset({
+               id: device.id,
+               name: device.name,
+               location: device.location,
+               mac: device.mac,
+               ipAddress: device.ipAddress,
+               isEnabled: device.isEnabled ?? false
             });
-         });
-
-      setLoading(false);
-      dialogUpdate(false);
+         }
+      }
+      setOpen(open);
    }
 
-   function dialogUpdate(open: boolean) {
-      setLoading(false);
-      setOpen(open);
-      form.reset();
+   function onFormSubmit(values: EditDeviceType) {
+      execute(values);
+      dialogUpdate(false);
    }
 
    return (
       <Dialog open={isOpen} onOpenChange={dialogUpdate}>
          <DialogTrigger asChild>
-            <Button variant={"ghost"} size={"icon"} onClick={() => dialogUpdate(true)}>
-               <Pen />
+            <Button variant="ghost" onClick={() => dialogUpdate(true)}>
+               <Pencil />
             </Button>
          </DialogTrigger>
          <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-               <DialogTitle>Přidat zařízení</DialogTitle>
+               <DialogTitle>Upravit zařízení</DialogTitle>
             </DialogHeader>
             <Form {...form}>
-               <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+               <form onSubmit={form.handleSubmit(onFormSubmit)} className="w-full space-y-4">
                   <FormField
                      control={form.control}
                      name="name"
@@ -88,7 +80,7 @@ export function EditDeviceDialog({ item }: { item: Device }) {
                         <FormItem>
                            <FormLabel>Název zařízení</FormLabel>
                            <FormControl>
-                              <Input placeholder="Papago Karel" {...field} />
+                              <Input {...field} />
                            </FormControl>
                            <FormMessage />
                         </FormItem>
@@ -114,7 +106,7 @@ export function EditDeviceDialog({ item }: { item: Device }) {
                         <FormItem>
                            <FormLabel>MAC adresa</FormLabel>
                            <FormControl>
-                              <Input placeholder="AA:BB:CC:DD:EE:FF" {...field} />
+                              <Input {...field} />
                            </FormControl>
                            <FormMessage />
                         </FormItem>
@@ -151,16 +143,9 @@ export function EditDeviceDialog({ item }: { item: Device }) {
                         </FormItem>
                      )}
                   />
-                  {isLoading ? (
-                     <Button className="w-full mt-4" disabled>
-                        <Loader2 className="animate-spin" />
-                        Ukládání
-                     </Button>
-                  ) : (
-                     <Button className="w-full mt-4" type="submit">
-                        Uložit
-                     </Button>
-                  )}
+                  <Button className="w-full mt-4" type="submit">
+                     Uložit
+                  </Button>
                </form>
             </Form>
          </DialogContent>

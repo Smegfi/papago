@@ -2,6 +2,9 @@
 import { getDevicesAction } from "@/server/actions";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { CreateDeviceDialog } from "./create-device";
+import { EditDeviceDialog } from "./edit-device";
+import { Badge } from "@/components/ui/badge";
+import { RemoveDeviceDialog } from "./delete-device";
 
 export default async function Page() {
    const devices = await getDevicesAction();
@@ -15,21 +18,32 @@ export default async function Page() {
             <TableCaption>Seznam zařízení.</TableCaption>
             <TableHeader>
                <TableRow>
-                  <TableHead className="w-[100px]">Název</TableHead>
-                  <TableHead>Umístění</TableHead>
+                  <TableHead>Název</TableHead>
+                  <TableHead className="w-[150px]">Umístění</TableHead>
                   <TableHead>MAC</TableHead>
                   <TableHead>IP Adresa</TableHead>
-                  <TableHead>Stav</TableHead>
+                  <TableHead className="w-[100px] text-center">Stav</TableHead>
+                  <TableHead></TableHead>
                </TableRow>
             </TableHeader>
             <TableBody>
                {devices?.data?.map((device) => (
                   <TableRow key={device.id}>
-                     <TableCell className="font-medium">{device.name}</TableCell>
+                     <TableCell className="font-bold">{device.name}</TableCell>
                      <TableCell>{device.location}</TableCell>
-                     <TableCell>{device.mac}</TableCell>
+                     <TableCell>{device.mac.toLowerCase()}</TableCell>
                      <TableCell>{device.ipAddress}</TableCell>
-                     <TableCell>{device.isEnabled ? "Povoleno" : "Zakázáno"}</TableCell>
+                     <TableCell className="text-center">
+                        {device.isEnabled ? (
+                           <Badge className="bg-green-600 text-white">Povoleno</Badge>
+                        ) : (
+                           <Badge className="bg-red-600 text-white">Zakázáno</Badge>
+                        )}
+                     </TableCell>
+                     <TableCell>
+                        <EditDeviceDialog deviceId={device.id} />
+                        <RemoveDeviceDialog deviceId={device.id} />
+                     </TableCell>
                      {/* TODO: Add device update and delete modal*/}
                   </TableRow>
                ))}

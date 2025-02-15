@@ -12,8 +12,6 @@ import { Switch } from "@/components/ui/switch";
 import { createDeviceSchema, CreateDeviceType } from "@/server/types";
 import { createDeviceAction } from "@/server/actions";
 import { useAction } from "next-safe-action/hooks";
-import { toast } from "@/hooks/use-toast";
-
 export function CreateDeviceDialog() {
    const [isOpen, setOpen] = useState(false);
    const {execute} = useAction(createDeviceAction, {
@@ -44,8 +42,8 @@ export function CreateDeviceDialog() {
    }
 
    function onFormSubmit(values: CreateDeviceType) {
-      console.log(values);
       execute(values);
+      dialogUpdate(false);
    }
 
    return (
@@ -132,7 +130,7 @@ export function CreateDeviceDialog() {
                         </FormItem>
                      )}
                   />
-                  <Button className="w-full mt-4" type="submit" onClick={() => onFormSubmit(form.getValues())}>
+                  <Button className="w-full mt-4" type="submit">
                      Uložit
                   </Button>
                </form>
