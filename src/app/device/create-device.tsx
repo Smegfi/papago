@@ -12,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import { createDeviceSchema, CreateDeviceType } from "@/server/types";
 import { createDeviceAction } from "@/server/actions";
 import { useAction } from "next-safe-action/hooks";
+import { TestDeviceConnection } from "./test-connection";
 export function CreateDeviceDialog() {
    const [isOpen, setOpen] = useState(false);
    const {execute} = useAction(createDeviceAction, {
@@ -108,6 +109,7 @@ export function CreateDeviceDialog() {
                            <FormControl>
                               <div className="flex w-full max-w-sm items-center space-x-2">
                                  <Input placeholder="10.41.20.10" {...field} />
+                                 <TestDeviceConnection ipAddress={field.value} />
                               </div>
                            </FormControl>
                            <FormMessage />

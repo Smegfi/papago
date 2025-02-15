@@ -34,3 +34,9 @@ export const deleteDeviceSchema = z.object({
    ipAddress: z.string().ip(),
 });
 export type DeleteDeviceType = z.infer<typeof deleteDeviceSchema>;
+
+// Test Connection
+export const testConnectionSchema = z.object({
+   ipAddress: z.string().ip(),
+});
+export type TestConnectionType = z.infer<typeof testConnectionSchema>;
