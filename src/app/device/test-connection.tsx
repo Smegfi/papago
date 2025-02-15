@@ -37,7 +37,7 @@ export function TestDeviceConnection({ ipAddress }: { ipAddress: string }) {
             title: "Úspěšně připojeno",
             description: (
                <pre>
-                  <code>{JSON.stringify(result.data, null, 2)}</code>
+                  <code>{JSON.stringify(result?.data, null, 2)}</code>
                </pre>
             ),
          });
@@ -50,7 +50,7 @@ export function TestDeviceConnection({ ipAddress }: { ipAddress: string }) {
       } else if (status === "executing") {
          setButtonStyle("");
       }
-   }, [status]);
+   }, [status, result]);
 
    return (
       <>
