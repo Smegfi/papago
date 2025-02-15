@@ -6,6 +6,7 @@ import { ChartArea, Settings2, ThermometerSnowflake, ThermometerSun } from "luci
 import { NavMain } from "@/components/navigation/nav-main";
 import { NavUser } from "@/components/navigation/nav-user";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 const data = {
    user: {
@@ -41,15 +42,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenu>
                <SidebarMenuItem>
                   <SidebarMenuButton size="lg" asChild>
-                     <a href="#">
-                        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-background text-sidebar-primary-foreground">
+                     <Link href="/">
+                        <div className="flex aspect-square size-8 items-center justify-center">
                            <ThermometerSun className="size-5" />
                         </div>
                         <div className="grid flex-1 text-left text-sm leading-tight">
                            <span className="truncate font-semibold">Praha 10</span>
                            <span className="truncate text-xs">papago teploměry</span>
                         </div>
-                     </a>
+                     </Link>
                   </SidebarMenuButton>
                </SidebarMenuItem>
             </SidebarMenu>
