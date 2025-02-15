@@ -4,7 +4,7 @@ export default defineConfig({
    dialect: "sqlite",
    schema: "server/schema.ts",
    dbCredentials: {
-      url: "file:server/dev-database.db",
+      url: process.env.DATABASE_URL!,
    },
    out: "server/drizzle",
 });
