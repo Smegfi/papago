@@ -13,19 +13,12 @@ import { createDeviceSchema, CreateDeviceType } from "@/server/types";
 import { createDeviceAction } from "@/server/actions";
 import { useAction } from "next-safe-action/hooks";
 import { TestDeviceConnection } from "./test-connection";
+
+
 export function CreateDeviceDialog() {
    const [isOpen, setOpen] = useState(false);
-   const {execute} = useAction(createDeviceAction, {
-      onSuccess: () => {
-         console.log("success...");
-      },
-      onError: (errors) => {
-         console.log("error...", errors);
-      },
-      onExecute: (data) => {
-         console.log("executing...", data);
-      }
-   });
+   const {execute} = useAction(createDeviceAction);
+
    const form = useForm<CreateDeviceType>({
       resolver: zodResolver(createDeviceSchema),
       defaultValues: {

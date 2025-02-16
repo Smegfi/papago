@@ -1,39 +1,22 @@
 import { sql } from "drizzle-orm";
-import { blob, integer as int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer as int, pgTable as table, varchar as text, boolean, serial, json, timestamp } from "drizzle-orm/pg-core";
 
-export const device = sqliteTable("device", {
-   id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+export const device = table("device", {
+   id: serial("id").primaryKey(),
    name: text("name", { length: 128 }).notNull(),
    location: text("location", { length: 128 }).notNull(),
    mac: text("mac", { length: 256 }).notNull(),
    ipAddress: text("ip_address", { length: 256 }).notNull(),
-   isEnabled: int("is_enabled", { mode: "boolean" }).default(false),
-   createdAt: text("created_at").default(sql`(CURRENT_TIMESTAMP)`),
-   updatedAt: text("updated_at")
-      .default(sql`(CURRENT_TIMESTAMP)`)
-      .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
+   isEnabled: boolean("is_enabled").default(false),
+   createdAt: timestamp("created_at", {mode: "date"}).defaultNow(),
+   updatedAt: timestamp("updated_at", {mode: "date"}).defaultNow().$onUpdate(() => sql`now()`),
 });
 
-export const measuring = sqliteTable("measuring", {
-   id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-   deviceId: int("deviceId", { mode: "number" })
+export const measuring = table("measuring", {
+   id: serial("id").primaryKey(),
+   deviceId: int("deviceId")
       .notNull()
       .references(() => device.id),
-   timestamp: int("timestamp", { mode: "timestamp" })
-      .default(sql`(CURRENT_TIMESTAMP)`)
-      .notNull(),
-   value: text("value", { length: 128 }).notNull(),
-   status: int("status", { mode: "number" }).notNull(),
-   units: int("units", { mode: "number" }).notNull(),
-});
-
-export const measuringTest = sqliteTable("measuring_test", {
-   id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-   deviceId: int("deviceId", { mode: "number" })
-      .notNull()
-      .references(() => device.id),
-   timestamp: text("timestamp")
-      .default(sql`(CURRENT_TIMESTAMP)`)
-      .notNull(),
-   rawData: blob("raw_data", { mode: "json" }).notNull(),
+   timestamp: timestamp("timestamp", {mode: "date"}).defaultNow(),
+   rawData: json("raw_data").notNull(),
 });

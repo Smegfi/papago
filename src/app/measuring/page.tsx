@@ -1,6 +1,5 @@
 import { getMeasuringAction } from "@/server/actions";
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Suspense } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default async function Page() {
@@ -8,7 +7,6 @@ export default async function Page() {
    return (
       <>
          <h2 className="text-3xl font-semibold tracking-tight">Měření</h2>
-         <Suspense>
          <Table>
             <TableCaption>Seznam měření.</TableCaption>
             <TableHeader>
@@ -22,7 +20,7 @@ export default async function Page() {
                   {measuring?.data?.map((item) => (
                      <TableRow key={item.id}>
                      <TableCell className="font-bold">{item.deviceId}</TableCell>
-                     <TableCell>{new Date(item.timestamp).toLocaleString("cs-CZ", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</TableCell>
+                     <TableCell>{item.timestamp?.toLocaleString("cs-CZ", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</TableCell>
                      <TableCell>
                         <ScrollArea className="h-64 rounded-md border">
                            <pre>
@@ -36,7 +34,6 @@ export default async function Page() {
                   ))}
                </TableBody>
             </Table>
-         </Suspense>
       </>
    );
 }

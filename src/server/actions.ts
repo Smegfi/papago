@@ -2,7 +2,7 @@
 
 import { actionClient } from "@/lib/safe-action";
 import { db } from "@/server/index";
-import { device, measuringTest } from "./schema";
+import { device, measuring } from "./schema";
 import { eq } from "drizzle-orm";
 import { createDeviceSchema, deleteDeviceSchema, editDeviceSchema, getDeviceByIdSchema, testConnectionSchema } from "@/server/types";
 import { revalidatePath } from "next/cache";
@@ -85,7 +85,7 @@ export const testConnectionActionInternal = actionClient
 
 export const fetchAllDevicesAction = actionClient.action(async () => {
    const devices = await db.query.device.findMany({ where: eq(device.isEnabled, true) });
-
+   const calledDevices = [];
    if (devices.length > 0) {
       const deviceCalls = [];
       for (const device of devices) {
@@ -97,19 +97,19 @@ export const fetchAllDevicesAction = actionClient.action(async () => {
       if (results.length > 0) {
          for (const result of results) {
             if (result) {
-               await db.insert(measuringTest).values({
+               await db.insert(measuring).values({
                   deviceId: result.data!.deviceId,
                   rawData: result.data!.rawData,
                });
+               calledDevices.push(devices.filter((d) => d.id === result.data!.deviceId));
             }
          }
       }
    }
-
-   return devices;
+   return calledDevices;
 });
 
 export const getMeasuringAction = actionClient.action(async () => {
-   const measuring = await db.query.measuringTest.findMany();
+   const measuring = await db.query.measuring.findMany();
    return measuring;
 });
