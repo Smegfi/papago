@@ -17,7 +17,7 @@ export default async function Page() {
                </TableRow>
             </TableHeader>
                <TableBody>
-                  {measuring?.data?.map((item) => (
+                  {measuring!.data!.map((item) => (
                      <TableRow key={item.id}>
                      <TableCell className="font-bold">{item.deviceId}</TableCell>
                      <TableCell>{item.timestamp?.toLocaleString("cs-CZ", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</TableCell>

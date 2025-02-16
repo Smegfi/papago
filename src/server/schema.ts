@@ -1,4 +1,3 @@
-import { sql } from "drizzle-orm";
 import { integer as int, pgTable as table, varchar as text, boolean, serial, json, timestamp } from "drizzle-orm/pg-core";
 
 export const device = table("device", {
@@ -9,7 +8,7 @@ export const device = table("device", {
    ipAddress: text("ip_address", { length: 256 }).notNull(),
    isEnabled: boolean("is_enabled").default(false),
    createdAt: timestamp("created_at", {mode: "date"}).defaultNow(),
-   updatedAt: timestamp("updated_at", {mode: "date"}).defaultNow().$onUpdate(() => sql`now()`),
+   updatedAt: timestamp("updated_at", {mode: "date"}).defaultNow(),
 });
 
 export const measuring = table("measuring", {

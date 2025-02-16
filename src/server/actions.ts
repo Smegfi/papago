@@ -23,7 +23,7 @@ export const createDeviceAction = actionClient.schema(createDeviceSchema).action
 export const editDeviceAction = actionClient.schema(editDeviceSchema).action(async ({ parsedInput: { id, name, location, mac, ipAddress, isEnabled } }) => {
    await db
       .update(device)
-      .set({ name: name!, location: location!, mac: mac!.toUpperCase(), ipAddress: ipAddress!, isEnabled: isEnabled })
+      .set({ name: name!, location: location!, mac: mac!.toUpperCase(), ipAddress: ipAddress!, isEnabled: isEnabled, updatedAt: new Date() })
       .where(eq(device.id, id));
    revalidatePath("/device");
 });
