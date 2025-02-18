@@ -7,4 +7,5 @@ export const db = drizzle({
       ssl: false,
    },
    schema: schemas,
+   logger: true,
 });

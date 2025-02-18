@@ -1,4 +1,5 @@
-import { integer as int, pgTable as table, varchar as text, boolean, serial, json, timestamp } from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
+import { boolean, integer as int, json, serial, pgTable as table, varchar as text, timestamp } from "drizzle-orm/pg-core";
 
 export const device = table("device", {
    id: serial("id").primaryKey(),
@@ -19,3 +20,7 @@ export const measuring = table("measuring", {
    timestamp: timestamp("timestamp", {mode: "date"}).defaultNow(),
    rawData: json("raw_data").notNull(),
 });
+
+export const measuringRelations = relations(measuring, ({ one }) => ({
+	device: one(device, { fields: [measuring.deviceId], references: [device.id] }),
+}));

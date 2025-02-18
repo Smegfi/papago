@@ -1,7 +1,6 @@
-import { getMeasuringAction } from "@/server/actions";
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { CreateDeviceDialog } from "../device/create-device";
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { getMeasuringAction } from "@/server/actions";
 import { headers } from "next/headers";
 
 export default async function Page() {
@@ -20,7 +19,7 @@ export default async function Page() {
                </TableRow>
             </TableHeader>
             <TableBody>
-               {measuring!.data!.map((item) => (
+               {measuring?.data?.map((item) => (
                   <TableRow key={item.id}>
                      <TableCell className="font-bold">{item.deviceId}</TableCell>
                      <TableCell>{item.timestamp?.toLocaleString("cs-CZ", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}</TableCell>
@@ -35,7 +34,6 @@ export default async function Page() {
                ))}
             </TableBody>
          </Table>
-         <CreateDeviceDialog />
       </>
    );
 }
