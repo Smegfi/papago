@@ -114,6 +114,7 @@ export const fetchAllDevicesAction = actionClient.action(async () => {
       }
    }
    revalidatePath("/measuring");
+   revalidatePath("/");
    return calledDevices;
 });
 
