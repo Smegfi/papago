@@ -1,6 +1,8 @@
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
+import { start } from "repl";
+
 
 const Card = React.forwardRef<
   HTMLDivElement,
@@ -17,16 +19,26 @@ const Card = React.forwardRef<
 ))
 Card.displayName = "Card"
 
+
+
+
+
 const CardHeader = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
+>(({ className, ...props }, ref) => {
+
+
+
+  return(
   <div
     ref={ref}
     className={cn("flex flex-col space-y-1.5 p-6", className)}
     {...props}
   />
-))
+)
+  
+})
 CardHeader.displayName = "CardHeader"
 
 const CardTitle = React.forwardRef<

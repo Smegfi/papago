@@ -10,7 +10,8 @@ import {
    getMeasuringByDeviceIdSchema,
    testConnectionSchema,
 } from "@/server/types";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq,gte, lte,and } from "drizzle-orm";
+import fetch from "node-fetch";
 import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -128,39 +129,78 @@ export const getMeasuringByDeviceIdAction = actionClient.schema(getMeasuringByDe
    return measure;
 });
 
-export const getMeasuringValuesByDeviceAction = actionClient.action(async () => {
-   const result = [];
-   const devices = await db.query.device.findMany({ where: eq(device.isEnabled, true) });
+export const getMeasuringValuesByDeviceAction = actionClient
+   .schema(
+      z.object({
+         deviceName: z.string(),
+         start: z.string(),
+         end: z.string(),
+      })
+   )
+   .action(async ({ parsedInput: { deviceName, start, end } }) => {
+      const devices = await db.query.device.findMany({ where: and(eq(device.isEnabled, true), eq(device.name, deviceName)) });
 
-   for (const device of devices) {
-      const foo = {
-         deviceId: device.id,
-         deviceName: device.name,
-         location: device.location,
-         values: [] as { time: string | undefined; temperature: string; humidity: string; pressure: string }[],
-      };
-      const measurings = await db.query.measuring.findMany({ where: eq(measuring.deviceId, device.id), limit: 5, orderBy: desc(measuring.timestamp) });
-      for (const measuring of measurings) {
-         const parsedData = JSON.parse(JSON.stringify(measuring.rawData));
+      const result = [];
 
-         if (parsedData.root.sns.length > 1) {
-            foo.values.push({
-               time: measuring.timestamp?.toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" }),
-               temperature: parsedData.root.sns[0].val,
-               humidity: parsedData.root.sns[0].val2,
-               pressure: parsedData.root.sns[0].val3,
-            });
+      for (const device of devices) {
+         const foo = {
+            deviceId: device.id,
+            deviceName: device.name,
+            location: device.location,
+            values: [] as { time: string | undefined; temperature: string; humidity: string; pressure: string }[],
+         };
+
+         let whereClause;
+
+         if (start && end) {
+            whereClause = and(
+               eq(measuring.deviceId, device.id),
+               gte(measuring.timestamp, new Date(start)),
+               lte(measuring.timestamp, new Date(end))
+            );
+         } else {
+            whereClause = eq(measuring.deviceId, device.id);
          }
-         else{
-            foo.values.push({
-               time: measuring.timestamp?.toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" }),
-               temperature: parsedData.root.sns.val,
-               humidity: parsedData.root.sns.val2,
-               pressure: parsedData.root.sns.val3,
+
+         let measurings = await db.query.measuring.findMany({
+            where: whereClause,
+            orderBy: desc(measuring.timestamp)
+         });
+
+         /*if (measurings.length === 0 && (start || end)) {
+            // If no data is found within the range, find the closest available data
+            measurings = await db.query.measuring.findMany({
+               where: eq(measuring.deviceId, device.id),
+               orderBy: desc(measuring.timestamp),
+               limit: 1
             });
+         }*/
+
+         for (const measuring of measurings) {
+            const parsedData = JSON.parse(JSON.stringify(measuring.rawData));
+
+            if (parsedData.root.sns.length > 1) {
+               foo.values.push({
+                  time: measuring.timestamp?.toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" }),
+                  temperature: parsedData.root.sns[0].val,
+                  humidity: parsedData.root.sns[0].val2,
+                  pressure: parsedData.root.sns[0].val3,
+               });
+            } else {
+               foo.values.push({
+                  time: measuring.timestamp?.toLocaleTimeString("cs-CZ", { hour: "2-digit", minute: "2-digit" }),
+                  temperature: parsedData.root.sns.val,
+                  humidity: parsedData.root.sns.val2,
+                  pressure: parsedData.root.sns.val3,
+               });
+            }
          }
+
+         result.push(foo);
       }
-      result.push(foo);
-   }
-   return result;
-});
+
+      return result;
+   });
+     
+
+
