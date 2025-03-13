@@ -4,16 +4,11 @@ import * as React from "react";
 import { ChartArea, Settings2, ThermometerSnowflake, ThermometerSun } from "lucide-react";
 
 import { NavMain } from "@/components/navigation/nav-main";
-import { NavUser } from "@/components/navigation/nav-user";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import Link from "next/link";
 
 const data = {
-   user: {
-      name: "shadcn",
-      email: "m@example.com",
-      avatar: "/avatars/shadcn.jpg",
-   },
+   
    navMain: [
       {
          title: "Zařízení",
@@ -59,7 +54,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <NavMain items={data.navMain} />
          </SidebarContent>
          <SidebarFooter>
-            <NavUser user={data.user} />
+           
          </SidebarFooter>
       </Sidebar>
    );

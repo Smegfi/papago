@@ -132,14 +132,13 @@ export const getMeasuringByDeviceIdAction = actionClient.schema(getMeasuringByDe
 export const getMeasuringValuesByDeviceAction = actionClient
    .schema(
       z.object({
-         deviceName: z.string(),
-         start: z.string(),
-         end: z.string(),
+         deviceName: z.string(),date:z.object({from:z.date(),to:z.date()})
       })
    )
-   .action(async ({ parsedInput: { deviceName, start, end } }) => {
+   .action(async ({ parsedInput: { deviceName, date } }) => {
       const devices = await db.query.device.findMany({ where: and(eq(device.isEnabled, true), eq(device.name, deviceName)) });
-
+      const start=date.from;
+      const end=date.to;
       const result = [];
 
       for (const device of devices) {

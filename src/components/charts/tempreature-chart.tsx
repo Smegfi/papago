@@ -35,7 +35,7 @@ export function Chart({
    return (
       <Card>
          <CardHeader>
-            <CardTitle>{data.deviceName}-{dataType}</CardTitle>
+            <CardTitle>{dataType}</CardTitle>
             <CardDescription>{data.location}</CardDescription>
          </CardHeader>
          <CardContent>
