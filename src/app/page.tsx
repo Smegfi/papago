@@ -55,7 +55,7 @@ export function SidebarRight({ devicename, timeRange, updateTimeRange, ...props 
    };
 
    return (
-      <Sidebar collapsible="none" className="sticky hidden lg:flex top-0 h-svh border-l z-index: 10" {...props}>
+      <Sidebar collapsible="none" className="sticky hidden lg:flex top-0 h-svh border-l z-index: 10"  {...props}>
          <SidebarHeader className="h-16 border-b border-sidebar-border">
             <span>{devicename}</span>
          </SidebarHeader>
