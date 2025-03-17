@@ -4,7 +4,7 @@ import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import { dType } from "@/app/page";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 const chartConfig = {
@@ -28,7 +28,10 @@ export function Chart({
    },dataType:dType
 }) {
 
-   
+   const units={
+      temperature:"°C",
+      humidity:"%",
+      pressure:"°C"}
 
 
 
@@ -48,13 +51,19 @@ export function Chart({
                      right: 12,
                   }}
                >
-                  <CartesianGrid vertical={false} />
-                  <XAxis dataKey="time" tickLine={false} axisLine={false} tickMargin={8} />
-                  <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-                  <Area dataKey={dataType} type="natural" fill="var(--color-desktop)" fillOpacity={0.4} stroke="var(--color-desktop)" />
+                  <CartesianGrid vertical={true} />
+                  <XAxis dataKey="time" tickLine={true} axisLine={true} tickMargin={5} />
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+                  <Area dataKey={dataType} type="linear" fill="#00f0ff" fillOpacity={0.4} stroke="var(--color-desktop)" />
                </AreaChart>
             </ChartContainer>
          </CardContent>
+         <CardFooter>
+         <div className="flex items-center gap-2 leading-none text-muted-foreground">
+              {units[dataType]}
+            </div>
+
+         </CardFooter>
       </Card>
    );
 }
