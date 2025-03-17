@@ -78,7 +78,9 @@ export function SidebarRight({ devicename, timeRange, updateTimeRange, ...props 
             />
              <Select onValueChange={handleDeviceChange}>
             <SelectTrigger className="w-full">
-               <SelectValue placeholder="Select a device" />
+               <SelectValue placeholder="Select a device: ">
+                  {devicename}</SelectValue>
+               
             </SelectTrigger>
             <SelectContent className="absolute z-20">
                {devices.map((device) => (
