@@ -7,8 +7,6 @@ import {
     SidebarContent,
     SidebarFooter,
     SidebarHeader,
-    SidebarInset,
-    SidebarProvider,
  } from "@/components/ui/sidebar";
  import { Calendar } from "@/components/ui/calendar";
  import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
