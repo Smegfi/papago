@@ -1,7 +1,8 @@
-"use client";
+'use client';
+
 import { useState, useEffect } from "react";
 import { Chart } from "@/components/charts/tempreature-chart";
-import { getMeasuringValuesByDeviceAction } from "@/server/actions";
+import { getMeasuringValuesByDeviceAction, getDevicesAction } from "@/server/actions";
 import { useAction } from "next-safe-action/hooks";
 import { cs } from "date-fns/locale";
 import type * as React from "react";
@@ -10,52 +11,57 @@ import {
    SidebarContent,
    SidebarFooter,
    SidebarHeader,
-   SidebarSeparator,
    SidebarInset,
    SidebarProvider,
-   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Calendar } from "@/components/ui/calendar";
 import { DateRange } from "react-day-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@radix-ui/react-select";
 
-const data = {
-   user: {
-      name: "shadcn",
-      email: "m@example.com",
-      avatar: "/avatars/shadcn.jpg",
-   },
-   calendars: [
-      {
-         name: "My Calendars",
-         items: ["Personal", "Work", "Family"],
-      },
-      {
-         name: "Favorites",
-         items: ["Holidays", "Birthdays"],
-      },
-      {
-         name: "Other",
-         items: ["Travel", "Reminders", "Deadlines"],
-      },
-   ],
-};
+interface Device {
+   id: number;
+   name: string;
+   location: string;
+   mac: string;
+   ipAddress: string;
+   isEnabled: boolean | null;
+}
 
 interface SidebarRightProps extends React.ComponentProps<typeof Sidebar> {
    devicename: string;
    timeRange: DateRange;
-   updateTimeRange: (newTimeRange: DateRange) => void;
+   updateTimeRange: (newTimeRange: DateRange, selectedDevice: string) => void;
 }
 
 export function SidebarRight({ devicename, timeRange, updateTimeRange, ...props }: SidebarRightProps) {
+   const [devices, setDevices] = useState<Device[]>([]);
+   const [selectedDevice, setSelectedDevice] = useState<string>(devicename);
+   const fetchDevices = getDevicesAction;
+
+   useEffect(() => {
+      const loadDevices = async () => {
+         const fetchedDevices = await fetchDevices();
+         if (fetchedDevices) {
+            if (fetchedDevices.data) {
+               setDevices(fetchedDevices.data);
+            }
+         }
+      };
+      loadDevices();
+   }, [fetchDevices]);
+
    const handleSelectRange = (range: DateRange | undefined) => {
       if (range && range.from && range.to) {
-         updateTimeRange({ from: range.from, to: range.to });
+         updateTimeRange({ from: range.from, to: range.to }, selectedDevice);
       }
    };
 
+   const handleDeviceChange = (deviceName: string) => {
+      setSelectedDevice(deviceName);
+   };
+
    return (
-      <Sidebar collapsible="none" className="sticky hidden lg:flex top-0 h-svh border-l z-index: 10"  {...props}>
+      <Sidebar collapsible="none" className="sticky hidden lg:flex top-0 h-svh border-l z-10" {...props}>
          <SidebarHeader className="h-16 border-b border-sidebar-border">
             <span>{devicename}</span>
          </SidebarHeader>
@@ -70,26 +76,27 @@ export function SidebarRight({ devicename, timeRange, updateTimeRange, ...props 
                locale={cs}
                className="border rounded-lg p-2"
             />
+             <Select onValueChange={handleDeviceChange}>
+            <SelectTrigger className="w-full">
+               <SelectValue placeholder="Select a device" />
+            </SelectTrigger>
+            <SelectContent className="absolute z-20">
+               {devices.map((device) => (
+                  <SelectItem key={device.id} value={device.name}>
+                     {device.name}
+                  </SelectItem>
+               ))}
+            </SelectContent>
+         </Select>
 
             <button
-               className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4  hover:border-blue-500 rounded"
-               onClick={() => updateTimeRange({ from: new Date(), to: new Date() })}
+               className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 hover:border-blue-500 rounded"
+               onClick={() => updateTimeRange({ from: new Date(), to: new Date() }, selectedDevice)}
             >
                Aktualizovat
             </button>
          </SidebarContent>
-
-<Select >
-   <SelectTrigger className="w-full">
-      <SelectValue placeholder="Select an option" />
-   </SelectTrigger>
-   
-   <SelectContent >
-      <SelectItem  value="test">Test</SelectItem>
-   </SelectContent>
-</Select>
-         
-
+        
          <SidebarFooter></SidebarFooter>
       </Sidebar>
    );
@@ -118,8 +125,9 @@ export default function Page() {
       setNow(new Date());
    }, [timeRange, deviceName, execute]);
 
-   const updateTimeRange = (newTimeRange: DateRange) => {
+   const updateTimeRange = (newTimeRange: DateRange, selectedDevice: string) => {
       setTimeRange(newTimeRange);
+      setDeviceName(selectedDevice);
    };
 
    return (
