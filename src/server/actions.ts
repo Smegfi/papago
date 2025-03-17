@@ -10,7 +10,7 @@ import {
    getMeasuringByDeviceIdSchema,
    testConnectionSchema,
 } from "@/server/types";
-import { desc, eq,gte, lte,and } from "drizzle-orm";
+import { desc, eq, gte, lte, and } from "drizzle-orm";
 import fetch from "node-fetch";
 import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { revalidatePath } from "next/cache";
@@ -132,13 +132,15 @@ export const getMeasuringByDeviceIdAction = actionClient.schema(getMeasuringByDe
 export const getMeasuringValuesByDeviceAction = actionClient
    .schema(
       z.object({
-         deviceName: z.string(),date:z.object({from:z.date(),to:z.date()})
+         deviceName: z.string(),
+         from: z.date(),
+         to: z.date(),
       })
    )
-   .action(async ({ parsedInput: { deviceName, date } }) => {
+   .action(async ({ parsedInput: { deviceName, from, to } }) => {
       const devices = await db.query.device.findMany({ where: and(eq(device.isEnabled, true), eq(device.name, deviceName)) });
-      const start=date.from;
-      const end=date.to;
+      const start = from;
+      const end = to;
       const result = [];
 
       for (const device of devices) {
@@ -152,18 +154,14 @@ export const getMeasuringValuesByDeviceAction = actionClient
          let whereClause;
 
          if (start && end) {
-            whereClause = and(
-               eq(measuring.deviceId, device.id),
-               gte(measuring.timestamp, new Date(start)),
-               lte(measuring.timestamp, new Date(end))
-            );
+            whereClause = and(eq(measuring.deviceId, device.id), gte(measuring.timestamp, new Date(start)), lte(measuring.timestamp, new Date(end)));
          } else {
             whereClause = eq(measuring.deviceId, device.id);
          }
 
          let measurings = await db.query.measuring.findMany({
             where: whereClause,
-            orderBy: desc(measuring.timestamp)
+            orderBy: desc(measuring.timestamp),
          });
 
          /*if (measurings.length === 0 && (start || end)) {
@@ -200,6 +198,3 @@ export const getMeasuringValuesByDeviceAction = actionClient
 
       return result;
    });
-     
-
-
