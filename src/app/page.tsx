@@ -16,8 +16,6 @@ export enum dType {
 export default function Page() {
    const { execute, result } = useAction(getMeasuringValuesByDeviceAction);
 
-   
-
    return (
       <>
          <SidebarProvider>

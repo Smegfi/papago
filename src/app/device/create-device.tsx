@@ -14,7 +14,6 @@ import { createDeviceAction } from "@/server/actions";
 import { useAction } from "next-safe-action/hooks";
 import { TestDeviceConnection } from "./test-connection";
 
-
 export function CreateDeviceDialog() {
    const [isOpen, setOpen] = useState(false);
    const {execute} = useAction(createDeviceAction);
