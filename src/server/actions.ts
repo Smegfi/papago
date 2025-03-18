@@ -164,14 +164,7 @@ export const getMeasuringValuesByDeviceAction = actionClient
             orderBy: desc(measuring.timestamp),
          });
 
-         /*if (measurings.length === 0 && (start || end)) {
-            // If no data is found within the range, find the closest available data
-            measurings = await db.query.measuring.findMany({
-               where: eq(measuring.deviceId, device.id),
-               orderBy: desc(measuring.timestamp),
-               limit: 1
-            });
-         }*/
+         
 
          for (const measuring of measurings) {
             const parsedData = JSON.parse(JSON.stringify(measuring.rawData));

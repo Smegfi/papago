@@ -42,8 +42,6 @@ export function SidebarRight({ actionExecution }: { actionExecution: (input: { d
                </SelectContent>
             </Select>
          </SidebarContent>
-
-         <SidebarFooter></SidebarFooter>
       </Sidebar>
    );
 }
