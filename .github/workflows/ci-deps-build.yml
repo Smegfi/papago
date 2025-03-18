@@ -1,17 +1,19 @@
 name: Dependabot CI
-on:
-  pull_request:
-    branches:
-      - 'dependabot/*'
 jobs:
   Dependabot-CI:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - name: Install dependencies
-        run: npm install
-      - name: Build application
-        run: npm run build
-      - name: Run the application
-        run: npm run start
+    - name: Check out repository code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v4.3.0
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the application
+      run: npm run build    

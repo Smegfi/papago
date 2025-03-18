@@ -3,14 +3,22 @@ run-name: ${{ github.actor }} is testing out Code Scan 🚀
 on:
   pull_request:
     branches:
-      - 'feature/*'
+      - main
 jobs:
   Code-Scan-CI:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
     steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - name: Install dependencies
-        run: npm install
-      - name: Test the code
-        run: npm run lint
+    - name: Check out repository code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v4.3.0
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Test the code
+      run: npm run lint

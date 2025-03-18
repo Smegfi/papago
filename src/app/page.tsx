@@ -6,17 +6,10 @@ import { useAction } from "next-safe-action/hooks";
 import { SidebarRight } from "@/components/navigation/select-panel";
 import * as React from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
-
-export enum dType {
-   temperature = "temperature",
-   pressure = "pressure",
-   humidity = "humidity",
-}
+import { dType } from "@/components/charts/tempreature-chart";
 
 export default function Page() {
    const { execute, result } = useAction(getMeasuringValuesByDeviceAction);
-
-   
 
    return (
       <>

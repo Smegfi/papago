@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { cs } from "date-fns/locale";
-import { Sidebar, SidebarContent, SidebarFooter } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
 import { Calendar } from "@/components/ui/calendar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getDevicesAction } from "@/server/actions";
