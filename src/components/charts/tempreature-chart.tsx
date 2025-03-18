@@ -31,14 +31,19 @@ export function Chart({
    const units={
       temperature:"°C",
       humidity:"%",
-      pressure:"°C"}
+      pressure:"°C"};
 
+      const czDisplayName = {
+         temperature: "Teplota",
+         humidity: "Vlhkost",
+         pressure: "Rosný bod",
+      };
 
 
    return (
       <Card>
          <CardHeader>
-            <CardTitle>{dataType}</CardTitle>
+            <CardTitle>{czDisplayName[dataType]}</CardTitle>
             <CardDescription>{data.location}</CardDescription>
          </CardHeader>
          <CardContent>
@@ -52,7 +57,7 @@ export function Chart({
                   }}
                >
                   <CartesianGrid vertical={true} />
-                  <XAxis dataKey="time" tickLine={true} axisLine={true} tickMargin={5} />
+                  <XAxis dataKey="time" tickLine={false} axisLine={false} tickMargin={5} />
                   <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
                   <Area dataKey={dataType} type="linear" fill="#00f0ff" fillOpacity={0.4} stroke="var(--color-desktop)" />
                </AreaChart>

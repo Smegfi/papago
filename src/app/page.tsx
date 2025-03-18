@@ -16,11 +16,13 @@ export enum dType {
 export default function Page() {
    const { execute, result } = useAction(getMeasuringValuesByDeviceAction);
 
+   
+
    return (
       <>
          <SidebarProvider>
             <SidebarInset>
-               <h2 className="text-3xl font-semibold tracking-tight">Dashboard</h2>
+               <h2 className="text-3xl font-semibold tracking-tight">Přístrojová deska</h2>
                <div className="grid auto-rows-max gap-1 md:grid-cols-3">
                   {result?.data?.map((measuring) => (
                      <React.Fragment key={measuring.deviceId}>
