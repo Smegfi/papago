@@ -2,8 +2,6 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { dType } from "@/app/page";
-
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
@@ -14,7 +12,11 @@ const chartConfig = {
    },
 } satisfies ChartConfig;
 
-
+export enum dType {
+   temperature = "temperature",
+   pressure = "pressure",
+   humidity = "humidity",
+}
 
 
 export function Chart({
