@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out Code Scan 🚀
 on:
   pull_request:
     branches:
-      - 'feature/*'
+      - main
 jobs:
   Code-Scan-CI:
     runs-on: ubuntu-latest

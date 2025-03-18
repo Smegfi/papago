@@ -2,7 +2,9 @@ name: Dependabot CI
 on:
   pull_request:
     branches:
-      - 'dependabot/*'
+      - main
+    tags:
+      - deps-update
 jobs:
   Dependabot-CI:
     runs-on: ubuntu-latest
