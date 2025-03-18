@@ -1,8 +1,4 @@
 name: Dependabot CI
-on:
-  pull_request:
-    branches:
-      - main
 jobs:
   Dependabot-CI:
     runs-on: ubuntu-latest
