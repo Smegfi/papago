@@ -2,7 +2,9 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { dType } from "@/app/page";
+
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 const chartConfig = {
@@ -12,20 +14,36 @@ const chartConfig = {
    },
 } satisfies ChartConfig;
 
-export function TempreatureChart({
-   data,
+
+
+
+export function Chart({
+   data,dataType
 }: {
    data: {
       deviceId: number;
       deviceName: string;
       location: string;
       values: { time: string | undefined; temperature: string; humidity: string; pressure: string }[];
-   };
+   },dataType:dType
 }) {
+
+   const units={
+      temperature:"°C",
+      humidity:"%",
+      pressure:"°C"};
+
+      const czDisplayName = {
+         temperature: "Teplota",
+         humidity: "Vlhkost",
+         pressure: "Rosný bod",
+      };
+
+
    return (
       <Card>
          <CardHeader>
-            <CardTitle>{data.deviceName}</CardTitle>
+            <CardTitle>{czDisplayName[dataType]}</CardTitle>
             <CardDescription>{data.location}</CardDescription>
          </CardHeader>
          <CardContent>
@@ -38,13 +56,19 @@ export function TempreatureChart({
                      right: 12,
                   }}
                >
-                  <CartesianGrid vertical={false} />
-                  <XAxis dataKey="time" tickLine={false} axisLine={false} tickMargin={8} />
-                  <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-                  <Area dataKey="temperature" type="natural" fill="var(--color-desktop)" fillOpacity={0.4} stroke="var(--color-desktop)" />
+                  <CartesianGrid vertical={true} />
+                  <XAxis dataKey="time" tickLine={false} axisLine={false} tickMargin={5} />
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
+                  <Area dataKey={dataType} type="linear" fill="#00f0ff" fillOpacity={0.4} stroke="var(--color-desktop)" />
                </AreaChart>
             </ChartContainer>
          </CardContent>
+         <CardFooter>
+         <div className="flex items-center gap-2 leading-none text-muted-foreground">
+              {units[dataType]}
+            </div>
+
+         </CardFooter>
       </Card>
    );
 }
