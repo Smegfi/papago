@@ -6,7 +6,16 @@
 
 version: 2
 updates:
- - package-ecosystem: "devcontainers"
-   directory: "/"
-   schedule:
-     interval: weekly
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: "npm"
+    directory: "/src"
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "[npm dependencies]"
+    labels:
+      - "deps-update"
