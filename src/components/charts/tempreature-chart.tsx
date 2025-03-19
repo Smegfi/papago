@@ -1,6 +1,6 @@
 "use client";
 
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis,YAxis } from "recharts";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -60,8 +60,9 @@ export function Chart({
                >
                   <CartesianGrid vertical={true} />
                   <XAxis dataKey="time" tickLine={false} axisLine={false} tickMargin={5} />
+                  <YAxis domain={['dataMin-5', 'dataMax+5']} allowDataOverflow={true} />
                   <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-                  <Area dataKey={dataType} type="linear" fill="#00f0ff" fillOpacity={0.4} stroke="var(--color-desktop)" />
+                  <Area dataKey={dataType} type="linear" fill="#00f0ff" fillOpacity={0.4} stroke="var(--color-desktop)"  />
                </AreaChart>
             </ChartContainer>
          </CardContent>
