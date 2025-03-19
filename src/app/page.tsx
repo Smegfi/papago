@@ -16,7 +16,7 @@ export default function Page() {
          <SidebarProvider>
             <SidebarInset>
                <h2 className="text-3xl font-semibold tracking-tight">Přístrojová deska</h2>
-               <div className="grid auto-rows-max gap-1 md:grid-cols-3">
+               <div className="grid auto-rows-max gap-1 md:grid-cols-2">
                   {result?.data?.map((measuring) => (
                      <React.Fragment key={measuring.deviceId}>
                         <div className="aspect-video rounded-xl bg-muted/50">

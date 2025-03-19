@@ -4,11 +4,12 @@ import * as React from "react";
 import { ChartArea, Settings2, ThermometerSnowflake, ThermometerSun } from "lucide-react";
 
 import { NavMain } from "@/components/navigation/nav-main";
-import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { AdminForm } from "../authentification/adminForm";
 import Link from "next/link";
 
 const data = {
-
    navMain: [
       {
          title: "Zařízení",
@@ -19,13 +20,6 @@ const data = {
          title: "Měření",
          url: "/measuring",
          icon: ChartArea,
-      },
-      {
-         title: "Nastavení",
-         url: "/settings",
-         icon: Settings2,
-         badge: "TODO",
-         badgeColor: "bg-red-500",
       },
    ],
 };
@@ -51,9 +45,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarMenu>
          </SidebarHeader>
          <SidebarContent>
-            <NavMain items={data.navMain} />
-         </SidebarContent>
 
+         </SidebarContent>
+         <SidebarFooter>
+         <Popover>
+               <PopoverTrigger>You Shall Not Pass</PopoverTrigger>
+               <PopoverContent>
+                  <AdminForm>
+                     <NavMain items={data.navMain} />
+                  </AdminForm>
+               </PopoverContent>
+            </Popover>
+         
+         </SidebarFooter>
+           
       </Sidebar>
    );
 }

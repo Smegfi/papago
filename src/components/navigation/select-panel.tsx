@@ -11,7 +11,7 @@ import { useAction } from "next-safe-action/hooks";
 export function SidebarRight({ actionExecution }: { actionExecution: (input: { deviceName: string; from: Date; to: Date }) => void }) {
    const now = new Date();
 
-   const [device, setDevice] = useState<string>("");
+   const [device, setDevice] = useState<string>("papago004");
    const [dateRange, setDateRange] = useState<DateRange | undefined>({ from: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000), to: now });
    const { execute, result } = useAction(getDevicesAction);
 
