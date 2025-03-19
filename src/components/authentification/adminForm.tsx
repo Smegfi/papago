@@ -35,7 +35,7 @@ interface FormData {
 }
 
 const onSubmit = (data: FormData) => {
-    const correctPassword = "Alva1:52c1" // Replace with your actual password
+    const correctPassword = "Alva1:52c1" 
     if (data.password === correctPassword) {
         console.log("welcome Gandalf White")
         setIsAuthenticated(true)
