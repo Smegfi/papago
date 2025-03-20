@@ -8,7 +8,7 @@ import * as React from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { dType } from "@/components/charts/tempreature-chart";
 import { Button } from "@/components/ui/button";
-import { exportToCSV } from "./utils/export-to-csv";
+import { exportToCSV } from "@/app/utils/export-to-csv";
 
 export default function Page() {
    const { execute, result } = useAction(getMeasuringValuesByDeviceAction);

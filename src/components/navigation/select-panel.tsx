@@ -29,7 +29,7 @@ export function SidebarRight({ actionExecution, children }: { actionExecution: (
    return (
       <Sidebar collapsible="none" className="sticky hidden lg:flex top-0 h-svh border-l z-10">
          <SidebarContent>
-            <Calendar mode="range" selected={dateRange} onSelect={setDateRange} locale={cs} className="border rounded-lg p-2" />
+            <Calendar  min={0}max={14}mode="range" selected={dateRange} onSelect={setDateRange} locale={cs} className="border rounded-lg p-2" />
             <Select onValueChange={(value) => setDevice(value)}>
                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Dostupná zařízení: ">{device}</SelectValue>

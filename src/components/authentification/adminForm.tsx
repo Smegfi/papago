@@ -28,6 +28,7 @@ export function AdminForm({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const form = useForm({
     resolver: zodResolver(formSchema),
+    defaultValues: { password: ""},
   })
 
 interface FormData {

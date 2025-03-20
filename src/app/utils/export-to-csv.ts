@@ -1,9 +1,19 @@
 
 import Papa from "papaparse";
+import { useToast } from "@/hooks/use-toast";
 
 
 export function exportToCSV(measuringValues: { data?: Array<{ deviceId: number | string; deviceName: string; location: string; values: Array<{ time: string | undefined; temperature: string | number; humidity: string | number; pressure: string | number }> }> }) {
-    console.log("Export to CSV clicked");
+    
+   const { toast } = useToast()
+
+
+   toast({
+      title: "Připravuji export dat....",
+      description: "Data budou co nevidět připravena ke stažení"
+});
+
+
     if (measuringValues?.data) {
        const flattenedData = measuringValues.data.flatMap(device => 
           device.values.map(value => ({
@@ -28,6 +38,9 @@ export function exportToCSV(measuringValues: { data?: Array<{ deviceId: number |
        link.click();
        document.body.removeChild(link);
     } else {
-       console.log("No data to export");
+      toast({
+         title: "Nejsou zvolena žádná data",
+         description: "Nejdříve je potřeba vybrat data k exportování",
+      });
     }
  }

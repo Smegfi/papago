@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChartArea, Settings2, ThermometerSnowflake, ThermometerSun } from "lucide-react";
+import { ChartArea, ThermometerSnowflake, ThermometerSun } from "lucide-react";
 
 import { NavMain } from "@/components/navigation/nav-main";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
