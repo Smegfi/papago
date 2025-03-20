@@ -7,8 +7,7 @@ import { SidebarRight } from "@/components/navigation/select-panel";
 import * as React from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { dType } from "@/components/charts/tempreature-chart";
-import { Button } from "@/components/ui/button";
-import { exportToCSV } from "@/app/utils/export-to-csv";
+import { ExportButton } from "@/components/buttons/ExportButton";
 
 export default function Page() {
    const { execute, result } = useAction(getMeasuringValuesByDeviceAction);
@@ -35,7 +34,7 @@ export default function Page() {
                </div>
             </SidebarInset>
             <SidebarRight actionExecution={execute} measuringValues={result}>
-               <Button onClick={() => exportToCSV(result)} className="mt-4">Export do CSV</Button>
+            <ExportButton measuringValues={result} />
             </SidebarRight>
          </SidebarProvider>
       </>
