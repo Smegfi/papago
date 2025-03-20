@@ -1,23 +1,22 @@
 "use client";
 import Papa from "papaparse";
-//import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 
 export function ExportButton({ measuringValues }: { measuringValues: { data?: Array<{ deviceId: number | string; deviceName: string; location: string; values: Array<{ time: string | undefined; temperature: string | number; humidity: string | number; pressure: string | number }> }> } }) {
 
-
+    const { toast } = useToast()
 
     function exportToCSV(measuringValues: { data?: Array<{ deviceId: number | string; deviceName: string; location: string; values: Array<{ time: string | undefined; temperature: string | number; humidity: string | number; pressure: string | number }> }> }) {
-    /*
-        const { toast } = useToast()
+    
+        
      
      
         toast({
            title: "Připravuji export dat....",
            description: "Data budou co nevidět připravena ke stažení"
-     });*/
+     });
 
-     console.log("")
      
      
          if (measuringValues?.data) {
@@ -44,12 +43,11 @@ export function ExportButton({ measuringValues }: { measuringValues: { data?: Ar
             link.click();
             document.body.removeChild(link);
          } else {
-            /*
+            
            toast({
               title: "Nejsou zvolena žádná data",
               description: "Nejdříve je potřeba vybrat data k exportování",
-           });*/
-           console.log("No data selected")
+           });
          }
       }
 
