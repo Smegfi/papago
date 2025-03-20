@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import { cs } from "date-fns/locale";
 import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
@@ -8,10 +9,11 @@ import { getDevicesAction } from "@/server/actions";
 import { DateRange } from "react-day-picker";
 import { useAction } from "next-safe-action/hooks";
 
-export function SidebarRight({ actionExecution }: { actionExecution: (input: { deviceName: string; from: Date; to: Date }) => void }) {
+
+export function SidebarRight({ actionExecution, children }: { actionExecution: (input: { deviceName: string; from: Date; to: Date }) => void, measuringValues: any, children: React.ReactNode }) {
    const now = new Date();
 
-   const [device, setDevice] = useState<string>("");
+   const [device, setDevice] = useState<string>("papago004");
    const [dateRange, setDateRange] = useState<DateRange | undefined>({ from: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000), to: now });
    const { execute, result } = useAction(getDevicesAction);
 
@@ -28,7 +30,7 @@ export function SidebarRight({ actionExecution }: { actionExecution: (input: { d
    return (
       <Sidebar collapsible="none" className="sticky hidden lg:flex top-0 h-svh border-l z-10">
          <SidebarContent>
-            <Calendar mode="range" selected={dateRange} onSelect={setDateRange} locale={cs} className="border rounded-lg p-2" />
+            <Calendar  min={0}max={14}mode="range" selected={dateRange} onSelect={setDateRange} locale={cs} className="border rounded-lg p-2" />
             <Select onValueChange={(value) => setDevice(value)}>
                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Dostupná zařízení: ">{device}</SelectValue>
@@ -41,6 +43,7 @@ export function SidebarRight({ actionExecution }: { actionExecution: (input: { d
                   ))}
                </SelectContent>
             </Select>
+            {children}
          </SidebarContent>
       </Sidebar>
    );
