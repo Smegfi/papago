@@ -10,7 +10,7 @@ import {
    getMeasuringByDeviceIdSchema,
    testConnectionSchema,
 } from "@/server/types";
-import { desc, eq, gte, lte, and, asc } from "drizzle-orm";
+import { eq, gte, lte, and, asc } from "drizzle-orm";
 import fetch from "node-fetch";
 import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { revalidatePath } from "next/cache";
@@ -159,39 +159,37 @@ export const getMeasuringValuesByDeviceAction = actionClient
             whereClause = eq(measuring.deviceId, device.id);
          }
 
-         let measurings = await db.query.measuring.findMany({
+         const measurings = await db.query.measuring.findMany({
             where: whereClause,
             orderBy: asc(measuring.timestamp),
          });
 
-         
-
          for (const measuring of measurings) {
             const parsedData = JSON.parse(JSON.stringify(measuring.rawData));
-          
+
             const formattedTime = measuring.timestamp?.toLocaleString("cs-CZ", {
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
+               month: "2-digit",
+               day: "2-digit",
+               hour: "2-digit",
+               minute: "2-digit",
             });
-          
+
             if (parsedData.root.sns.length > 1) {
-              foo.values.push({
-                time: formattedTime,
-                temperature: parsedData.root.sns[0].val,
-                humidity: parsedData.root.sns[0].val2,
-                pressure: parsedData.root.sns[0].val3,
-              });
+               foo.values.push({
+                  time: formattedTime,
+                  temperature: parsedData.root.sns[0].val,
+                  humidity: parsedData.root.sns[0].val2,
+                  pressure: parsedData.root.sns[0].val3,
+               });
             } else {
-              foo.values.push({
-                time: formattedTime,
-                temperature: parsedData.root.sns.val,
-                humidity: parsedData.root.sns.val2,
-                pressure: parsedData.root.sns.val3,
-              });
+               foo.values.push({
+                  time: formattedTime,
+                  temperature: parsedData.root.sns.val,
+                  humidity: parsedData.root.sns.val2,
+                  pressure: parsedData.root.sns.val3,
+               });
             }
-          }
+         }
 
          result.push(foo);
       }
