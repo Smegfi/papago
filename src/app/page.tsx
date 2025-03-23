@@ -7,7 +7,7 @@ import { SidebarRight } from "@/components/navigation/select-panel";
 import * as React from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { dType } from "@/components/charts/tempreature-chart";
-import { ExportButton } from "@/components/buttons/ExportButton";
+import { ExportButton } from "@/components/buttons/export-button";
 
 export default function Page() {
    const { execute, result } = useAction(getMeasuringValuesByDeviceAction);
@@ -33,11 +33,10 @@ export default function Page() {
                   ))}
                </div>
             </SidebarInset>
-            <SidebarRight actionExecution={execute} measuringValues={result}>
-            <ExportButton measuringValues={result} />
+            <SidebarRight actionExecution={execute}>
+               {result?.data && <ExportButton measuringValues={result.data} />}
             </SidebarRight>
          </SidebarProvider>
       </>
    );
 }
-

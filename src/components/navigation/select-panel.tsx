@@ -10,7 +10,13 @@ import { DateRange } from "react-day-picker";
 import { useAction } from "next-safe-action/hooks";
 
 
-export function SidebarRight({ actionExecution, children }: { actionExecution: (input: { deviceName: string; from: Date; to: Date }) => void, measuringValues: any, children: React.ReactNode }) {
+export function SidebarRight({
+   actionExecution,
+   children,
+}: {
+   actionExecution: (input: { deviceName: string; from: Date; to: Date }) => void;
+   children: React.ReactNode;
+}) {
    const now = new Date();
 
    const [device, setDevice] = useState<string>("papago004");
