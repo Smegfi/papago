@@ -34,7 +34,7 @@ export default function Page() {
                </div>
             </SidebarInset>
             <SidebarRight actionExecution={execute}>
-               {result?.data && <ExportButton measuringValues={result.data} />}
+               <ExportButton measuringValues={result!.data!} />
             </SidebarRight>
          </SidebarProvider>
       </>

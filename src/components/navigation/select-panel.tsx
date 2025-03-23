@@ -5,7 +5,7 @@ import { cs } from "date-fns/locale";
 import { Sidebar, SidebarContent } from "@/components/ui/sidebar";
 import { Calendar } from "@/components/ui/calendar";
 import { DateRange } from "react-day-picker";
-import DeviceSelection from "./device-selection";
+import DeviceSelection from "@/components/navigation/device-selection";
 
 export function SidebarRight({
    actionExecution,
