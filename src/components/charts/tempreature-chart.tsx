@@ -1,8 +1,8 @@
 "use client";
 
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis,YAxis } from "recharts";
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
 const chartConfig = {
@@ -56,21 +56,18 @@ export function Chart({
                   margin={{
                      left: 12,
                      right: 12,
+                     bottom: 12,
                   }}
                >
                   <CartesianGrid vertical={true} />
-                  <XAxis dataKey="time" tickLine={false} axisLine={false} tickMargin={5} />
+                  <XAxis dataKey="time" tickLine={false} axisLine={false} tickMargin={5} label={{ value: 'Datum a čas', position: 'insideBottom', offset: -5 }}/>
+                  <YAxis domain={['dataMin-5', 'dataMax+5']}tickFormatter={(tick) => tick.toFixed(1)} allowDataOverflow={true} label={{ value: units[dataType], angle: 0, position: 'insideLeft' }}/>
                   <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="dashed" />} />
-                  <Area dataKey={dataType} type="linear" fill="#00f0ff" fillOpacity={0.4} stroke="var(--color-desktop)" />
+                  <Area dataKey={dataType} type="linear" fill="#00f0ff" fillOpacity={0.4} stroke="var(--color-desktop)"  />
                </AreaChart>
             </ChartContainer>
          </CardContent>
-         <CardFooter>
-         <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              {units[dataType]}
-            </div>
-
-         </CardFooter>
+         
       </Card>
    );
 }

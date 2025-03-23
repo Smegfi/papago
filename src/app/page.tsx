@@ -7,6 +7,7 @@ import { SidebarRight } from "@/components/navigation/select-panel";
 import * as React from "react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { dType } from "@/components/charts/tempreature-chart";
+import { ExportButton } from "@/components/buttons/export-button";
 
 export default function Page() {
    const { execute, result } = useAction(getMeasuringValuesByDeviceAction);
@@ -16,7 +17,7 @@ export default function Page() {
          <SidebarProvider>
             <SidebarInset>
                <h2 className="text-3xl font-semibold tracking-tight">Přístrojová deska</h2>
-               <div className="grid auto-rows-max gap-1 md:grid-cols-3">
+               <div className="grid auto-rows-max gap-1 md:grid-cols-2">
                   {result?.data?.map((measuring) => (
                      <React.Fragment key={measuring.deviceId}>
                         <div className="aspect-video rounded-xl bg-muted/50">
@@ -32,7 +33,9 @@ export default function Page() {
                   ))}
                </div>
             </SidebarInset>
-            <SidebarRight actionExecution={execute} />
+            <SidebarRight actionExecution={execute}>
+               <ExportButton measuringValues={result!.data!} />
+            </SidebarRight>
          </SidebarProvider>
       </>
    );
