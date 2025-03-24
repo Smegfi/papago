@@ -27,7 +27,7 @@
       "@radix-ui/react-tooltip": "^1.1.8",
       "class-variance-authority": "^0.7.1",
       "clsx": "^2.1.1",
-      "date-fns": "^3.6.0",
+      "date-fns": "^4.1.0",
       "dotenv": "^16.4.7",
       "drizzle-orm": "^0.40.1",
       "fast-xml-parser": "^4.5.1",
